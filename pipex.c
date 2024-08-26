@@ -29,5 +29,8 @@ char	*check_com(char *com, char **envp)
 
 void	cpid1(t_pp g, char **argv, char **envp)
 {
+	g.com = ft_split(argv[2], ' ');
+	g.exec = check_com(g.com[0], envp);
+	g.fd_in = open(argv[1], O_RDONLY);
 	
 }
