@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 17:37:09 by saragar2          #+#    #+#             */
-/*   Updated: 2024/06/24 17:37:11 by saragar2         ###   ########.fr       */
+/*   Created: 2023/09/12 14:50:21 by saragar2          #+#    #+#             */
+/*   Updated: 2023/09/21 18:58:56 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-
-typedef struct s_pp
+int	ft_isdigit(int c)
 {
-	int		pipefd[2];
-	pid_t	pid[2];
-	int		fd_in;
-	int		fd_out;
-	char	*exec;
-	char	**com;
-}				t_pp;
+	if (c >= '0' && c <= '9')
+		return (1);
+	else
+		return (0);
+}
+/*int	main(void)
+{
+	int	ex;
 
-
-char	*check_com(char *com, char **envp);
-
-#endif
+	ex = 'p';
+	printf("%i", ft_isdigit(ex));
+	printf("%i", isdigit(ex));
+}*/

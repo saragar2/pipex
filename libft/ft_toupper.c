@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 17:37:09 by saragar2          #+#    #+#             */
-/*   Updated: 2024/06/24 17:37:11 by saragar2         ###   ########.fr       */
+/*   Created: 2023/09/17 19:31:22 by saragar2          #+#    #+#             */
+/*   Updated: 2023/09/21 19:22:44 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-
-typedef struct s_pp
+int	ft_toupper(int c)
 {
-	int		pipefd[2];
-	pid_t	pid[2];
-	int		fd_in;
-	int		fd_out;
-	char	*exec;
-	char	**com;
-}				t_pp;
-
-
-char	*check_com(char *com, char **envp);
-
-#endif
+	if (c >= 'a' && c <= 'z')
+		c -= 32;
+	return (c);
+}
+/*int main()
+{
+    char letra = 'j';
+    int mayuscula = toupper(letra);
+	printf("La letra '%c' en mayúscula es '%c'\n", letra, mayuscula);
+	mayuscula = ft_toupper(letra);
+    printf("La letra '%c' en mayúscula es '%c'\n", letra, mayuscula);
+	return (0);
+}*/

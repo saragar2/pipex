@@ -1,6 +1,6 @@
 NAME = pipex
 
-SOURCES =			pipex.c
+SOURCES =			main.c pipex.c
 
 # SOURCES_BONUS =		pipex_bonus.c strjoin_bonus.c strncmp_bonus.c \
 # 					split_bonus.c errors_bonus.c child_bonus.c \
@@ -17,8 +17,12 @@ CHACHE = .cache
 
 all : $(NAME)
 
-$(NAME): $(OBJECTS)
-	$(CC) $(OBJECTS) $(CFLAGS) -o $(NAME)
+$(NAME): $(OBJECTS) libft/libft.a
+	$(CC) $(OBJECTS) libft/libft.a -o $(NAME)
+
+libft/libft.a:
+	make -C libft/
+	@echo "Make libft"
 
 bonus: $(CHACHE)
 

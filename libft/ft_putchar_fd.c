@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 17:37:09 by saragar2          #+#    #+#             */
-/*   Updated: 2024/06/24 17:37:11 by saragar2         ###   ########.fr       */
+/*   Created: 2023/10/07 16:38:05 by saragar2          #+#    #+#             */
+/*   Updated: 2023/10/07 16:40:07 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include <unistd.h>
 
-# include "libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-
-typedef struct s_pp
+void	ft_putchar_fd(char c, int fd)
 {
-	int		pipefd[2];
-	pid_t	pid[2];
-	int		fd_in;
-	int		fd_out;
-	char	*exec;
-	char	**com;
-}				t_pp;
-
-
-char	*check_com(char *com, char **envp);
-
-#endif
+	write(fd, &c, 1);
+}
+/*int	main()
+{
+	ft_putchar_fd('a', 1);
+	return 0;
+}*/

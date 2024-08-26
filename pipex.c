@@ -1,43 +1,33 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 17:25:18 by saragar2          #+#    #+#             */
-/*   Updated: 2024/06/24 17:25:23 by saragar2         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
-void print_error(char *arg)
+char	*check_com(char *com, char **envp)
 {
-    perror(arg);
-    exit(1);
+	int		i;
+	int		j;
+	char	**routes;
+	char	*new_com;
+
+	i = 0;
+	j = 0;
+	if (ft_strchr(com, '/'))
+		return (com);
+	while(envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
+		i++;
+	if(envp[i] == 0)
+		return (com);
+	envp[i] += 5;
+	routes = ft_split(envp[i], ':');
+	while (routes[j++])
+	{
+		new_com = ft_strjoin(routes[i], "/");
+		new_com = ft_strjoin(new_com, com);
+		if (access(new_com, X_OK) == 0)
+			return (new_com);
+	}
+	return(com);
 }
 
-int main(int argc, char **argv, char **envp)
+void	cpid1(t_pp g, char **argv, char **envp)
 {
-    t_pp g;
-
-    printf("%s\n", *argv);
-    while (1)
-    {
-    }
-    exit(0);
-    if (argc != 5)
-        print_error("cantidad invalida de argumentos");
-    if (pipe(g.pipefd) == -1)
-		print_error("Error al crear el pipe");
-    if (g.pid[0] == 0)
-		create_pid1(g, argv, envp);
-	else if (g.pid[0] < 0)
-		print_error("Error al crear pid1");
-	g.pid[1] = fork();
-	if (g.pid[1] == 0)
-		create_pid2(g, argv, envp);
-	else if (g.pid[1] < 0)
-		print_error("Error al crear pid2");
+	
 }

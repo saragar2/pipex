@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 17:37:09 by saragar2          #+#    #+#             */
-/*   Updated: 2024/06/24 17:37:11 by saragar2         ###   ########.fr       */
+/*   Created: 2023/09/12 15:38:06 by saragar2          #+#    #+#             */
+/*   Updated: 2023/10/05 18:30:33 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-
-typedef struct s_pp
+int	ft_isascii(int c)
 {
-	int		pipefd[2];
-	pid_t	pid[2];
-	int		fd_in;
-	int		fd_out;
-	char	*exec;
-	char	**com;
-}				t_pp;
+	if (c >= 0 && c <= 127)
+		return (1);
+	else
+		return (0);
+}
+/*int	main(void)
+{
+	int	ex;
 
-
-char	*check_com(char *com, char **envp);
-
-#endif
+	ex = -2;
+	printf("%i", ft_isascii(ex));
+	printf("%i", isascii(ex));
+}*/

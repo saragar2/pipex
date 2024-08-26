@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 17:37:09 by saragar2          #+#    #+#             */
-/*   Updated: 2024/06/24 17:37:11 by saragar2         ###   ########.fr       */
+/*   Created: 2023/09/17 19:43:18 by saragar2          #+#    #+#             */
+/*   Updated: 2023/09/21 19:22:15 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#include "libft.h"
 
-# include "libft/libft.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <sys/types.h>
-
-typedef struct s_pp
+int	ft_tolower(int c)
 {
-	int		pipefd[2];
-	pid_t	pid[2];
-	int		fd_in;
-	int		fd_out;
-	char	*exec;
-	char	**com;
-}				t_pp;
-
-
-char	*check_com(char *com, char **envp);
-
-#endif
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
+}
+/*int main()
+{
+    char letra = 'J';
+    int minuscula = tolower(letra);
+	printf("La letra '%c' en minuscula es '%c'\n", letra, minuscula);
+	minuscula = ft_tolower(letra);
+    printf("La letra '%c' en minuscula es '%c'\n", letra, minuscula);
+	return (0);
+}*/
