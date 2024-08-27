@@ -35,6 +35,7 @@ $(CHACHE) : $(OBJECTS_BONUS)
 clean:
 	$(REMOVE) $(OBJECTS)
 	$(REMOVE) $(OBJECTS_BONUS)
+	make -C libft/ fclean
 
 fclean: clean
 	$(REMOVE) $(NAME)

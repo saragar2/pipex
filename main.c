@@ -20,14 +20,15 @@ void print_error(char *arg)
 
 int main(int argc, char **argv, char **envp)
 {
-	t_pp g;
+	t_pp 	g;
+	int		status;
 
-	printf("%s\n", *argv);
-	exit(0);
+	status = 0;
 	if (argc != 5)
 		print_error("invalid amount of argument");
 	if (pipe(g.pipefd) == -1)
 		print_error("Error creating the pipe");
+	g.pid[0] = fork();
 	if (g.pid[0] == 0)
 		cpid1(g, argv, envp);
 	else if (g.pid[0] < 0)
@@ -37,19 +38,10 @@ int main(int argc, char **argv, char **envp)
 		cpid2(g, argv, envp);
 	else if (g.pid[1] < 0)
 		print_error("Error creating pid2");
+	close(g.pipefd[0]);
+	close(g.pipefd[1]);
+	waitpid(g.pid[0], NULL, 0);
+	waitpid(g.pid[1], &status, 0);
+	return (WEXITSTATUS(status));
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	if(argc == 1)
-// 	{
-// 		printf("%s\n\n", *argv);
-// 		while (envp)
-// 		{
-// 			printf("%s", *envp);
-// 			(envp)++;
-// 		}
-// 		check_com("hola", envp);
-// 	}
-// 	return (0);
-// }

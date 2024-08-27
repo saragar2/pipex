@@ -31,7 +31,9 @@ typedef struct s_pp
 	char	**com;
 }				t_pp;
 
-
+void 	print_error(char *arg);
 char	*check_com(char *com, char **envp);
+void	cpid1(t_pp g, char **argv, char **envp);
+void	cpid2(t_pp g, char **argv, char **envp);
 
 #endif
