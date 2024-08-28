@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/28 14:37:14 by saragar2          #+#    #+#             */
+/*   Updated: 2024/08/28 14:37:16 by saragar2         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 char	*check_com(char *com, char **envp)
@@ -58,7 +70,7 @@ void	cpid2(t_pp g, char **argv, char **envp)
 		print_error("Empty argument");
 	g.com = ft_split(argv[3], ' ');
 	g.exec = check_com(g.com[0], envp);
-	g.fd_out = open(argv[3],  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	g.fd_out = open(argv[4],  O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (g.fd_out < 0)
 		print_error("error opening or creating fd_out");
 	else if (g.pid[1] == 0)
