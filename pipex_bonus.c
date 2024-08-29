@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 14:37:14 by saragar2          #+#    #+#             */
-/*   Updated: 2024/08/28 14:37:16 by saragar2         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "pipex.h"
 
 char	*check_com(char *com, char **envp)
@@ -50,7 +38,7 @@ void	cpid1(t_pp g, char **argv, char **envp)
 	g.fd_in = open(argv[1], O_RDONLY);
 	if (g.fd_in < 0)
 		print_error("error opening fd_in");
-	else if (g.pid[0] == 0)
+	else if (g.pid == 0)
 	{
 		dup2(g.pipefd[1], STDOUT_FILENO);
 		dup2(g.fd_in, STDIN_FILENO);
@@ -62,6 +50,29 @@ void	cpid1(t_pp g, char **argv, char **envp)
 	}
 }
 
+void	cpidmid(t_pp g, char **argv, char **envp)
+{
+	while (argv[3] && ((*argv[3] >= 9 && *argv[3] <= 13) || *argv[3] == 32))
+		argv[3]++;
+	if (*argv[3] == '\0')
+		print_error("Empty argument");
+	g.com = ft_split(argv[3], ' ');
+	g.exec = check_com(g.com[0], envp);
+	g.fd_out = open(argv[4],  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (g.fd_out < 0)
+		print_error("error opening or creating fd_out");
+	else if (g.pid == 0)
+	{
+		dup2(g.pipefd[0], STDIN_FILENO);
+		dup2(g.fd_out, STDOUT_FILENO);
+		close(g.pipefd[0]);
+		close(g.pipefd[1]);
+		close(g.fd_out);
+		execve(g.exec, g.com, envp);
+		print_error("error executing second command");
+	}
+}
+
 void	cpid2(t_pp g, int argc, char **argv, char **envp)
 {
 	while (argv[3] && ((*argv[3] >= 9 && *argv[3] <= 13) || *argv[3] == 32))
@@ -70,10 +81,11 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 		print_error("Empty argument");
 	g.com = ft_split(argv[3], ' ');
 	g.exec = check_com(g.com[0], envp);
-	g.fd_out = open(argv[argc - 1],  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	printf("mal\n");
+	g.fd_out = open(argv[argc - 1],  O_WRONLY | O_CREAT, 0644);
 	if (g.fd_out < 0)
 		print_error("error opening or creating fd_out");
-	else if (g.pid[1] == 0)
+	else if (g.pid == 0)
 	{
 		dup2(g.pipefd[0], STDIN_FILENO);
 		dup2(g.fd_out, STDOUT_FILENO);

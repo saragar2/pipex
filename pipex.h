@@ -24,7 +24,7 @@
 typedef struct s_pp
 {
 	int		pipefd[2];
-	pid_t	pid[2];
+	pid_t	pid[3];
 	int		fd_in;
 	int		fd_out;
 	char	*exec;
@@ -34,6 +34,7 @@ typedef struct s_pp
 void 	print_error(char *arg);
 char	*check_com(char *com, char **envp);
 void	cpid1(t_pp g, char **argv, char **envp);
-void	cpid2(t_pp g, char **argv, char **envp);
+void	cpid2(t_pp g, int argc, char **argv, char **envp);
+void	cpidmid(t_pp g, char **argv, char **envp);
 
 #endif

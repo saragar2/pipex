@@ -35,7 +35,7 @@ int main(int argc, char **argv, char **envp)
 		print_error("Error creating pid1");
 	g.pid[1] = fork();
 	if (g.pid[1] == 0)
-		cpid2(g, argv, envp);
+		cpid2(g, argc, argv, envp);
 	else if (g.pid[1] < 0)
 		print_error("Error creating pid2");
 	close(g.pipefd[0]);
