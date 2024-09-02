@@ -23,6 +23,7 @@
 
 typedef struct s_pp
 {
+	int		aux_argc;
 	int		pipefd[2];
 	pid_t	pid[3];
 	int		fd_in;
