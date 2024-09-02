@@ -16,9 +16,10 @@ all: $(NAME)
 $(NAME): $(OBJECTS) libft/libft.a
 	$(CC) $(OBJECTS) libft/libft.a -o $(NAME)
 
-bonus: $(NAME)_bonus
+bonus: .bonus
 
-$(NAME)_bonus: $(OBJECTS_BONUS) libft/libft.a
+.bonus: $(OBJECTS_BONUS) libft/libft.a
+	@touch .bonus
 	$(CC) $(OBJECTS_BONUS) libft/libft.a -o $(NAME)
 
 libft/libft.a:
@@ -28,6 +29,7 @@ libft/libft.a:
 clean:
 	$(REMOVE) $(OBJECTS)
 	$(REMOVE) $(OBJECTS_BONUS)
+	$(REMOVE) .bonus
 	make -C libft/ fclean
 
 fclean: clean
