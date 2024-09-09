@@ -6,7 +6,7 @@ SOURCES_BONUS =		main_bonus.c pipex_bonus.c
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS_BONUS = $(SOURCES_BONUS:.c=.o)
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 REMOVE = rm -f
 CC = gcc
 CACHE = .cache

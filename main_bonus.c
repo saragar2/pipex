@@ -33,39 +33,31 @@ void print_error(char *arg)
 
 void	check_pid(t_pp g, int argc, char **argv, char **envp)
 {
+	g.curr_arg = 3;
 	g.aux_argc = argc;
 	g.pid[0] = fork();
 	if (g.pid[0] == 0)
-	{
 		cpid1(g, argv, envp);
-		exit(0);
-	}
 	else if (g.pid[0] < 0)
 		print_error("Error creating pid");
 	while ((g.aux_argc--) - 5 > 0 )
 	{
 		g.pid[1] = fork();
 		if (g.pid[1] == 0)
-		{
 			cpidmid(g, argv, envp);
-			exit(0);
-		}
 		else if (g.pid[1] < 0)
 			print_error("Error creating pid");
+		g.curr_arg++;
 	}
 	g.pid[2] = fork();
 	if (g.pid[2] == 0)
-	{
-		printf("si, ");
 		cpid2(g, argc, argv, envp);
-		exit(0);
-	}
 	else if (g.pid[2] < 0)
 		print_error("Error creating pid");
-	waitpid(g.pid[0], NULL, 0);
-	while ((g.aux_argc++) - 5 > 0)
-		waitpid(g.pid[1], NULL, 0);
-	waitpid(g.pid[2], NULL, 0);
+	// waitpid(g.pid[0], NULL, 0);
+	// while ((g.aux_argc++) - 5 > 0)
+	// 	waitpid(g.pid[1], NULL, 0);
+	// waitpid(g.pid[2], NULL, 0);
 }
 
 
@@ -82,9 +74,17 @@ int main(int argc, char **argv, char **envp)
 		print_error("Error creating the pipe");
 	check_pid(g, argc, argv, envp);
 	close(g.pipefd[0]);
-	close(g.pipefd[2]);
-	waitpid(g.pid[0], NULL, 0);
-	waitpid(g.pid[2], &status, 0);
+	close(g.pipefd[1]);
+	// waitpid(g.pid[0], NULL, 0);
+	// waitpid(g.pid[2], &status, 0);
+
+
+	while (1)
+	{
+		if (waitpid(-1, NULL, 0) == -1)
+			break ;
+	}
+
 	return (WEXITSTATUS(status));
 }
 
