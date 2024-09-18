@@ -31,62 +31,70 @@ void print_error(char *arg)
 // 		print_error("Error creating pid");
 // }
 
-void	check_pid(t_pp g, int argc, char **argv, char **envp)
-{
-	g.curr_arg = 3;
-	g.aux_argc = argc;
-	g.pid[0] = fork();
-	if (g.pid[0] == 0)
-		cpid1(g, argv, envp);
-	else if (g.pid[0] < 0)
-		print_error("Error creating pid");
-	while ((g.aux_argc--) - 5 > 0 )
-	{
-		g.pid[1] = fork();
-		if (g.pid[1] == 0)
-			cpidmid(g, argv, g.curr_arg, envp);
-		else if (g.pid[1] < 0)
-			print_error("Error creating pid");
-		g.curr_arg++;
-	}
-	g.pid[2] = fork();
-	if (g.pid[2] == 0)
-		cpid2(g, argc, argv, envp);
-	else if (g.pid[2] < 0)
-		print_error("Error creating pid");
-	close(g.pipefd[0]);
-	close(g.pipefd[1]);
-	
-	waitpid(g.pid[0], NULL, 0);  // Primer comando
-    waitpid(g.pid[1], NULL, 0);  // Comandos intermedios
-    waitpid(g.pid[2], NULL, 0);  // Último comando
-}
 
 
 
 int main(int argc, char **argv, char **envp)
 {
-	t_pp 	g;
-	int		status;
+    t_pp 	g;
+    int 	status;
+    int 	pipefd[2];   // Variable temporal para la pipe
+    int 	prev_pipefd[2]; // Para guardar el pipe anterior
 
-	status = 0;
-	if (argc < 5)
-		print_error("invalid amount of argument");
-	if (pipe(g.pipefd) == -1)
-		print_error("Error creating the pipe");
-	check_pid(g, argc, argv, envp);
-	close(g.pipefd[0]);
-	close(g.pipefd[1]);
-	// waitpid(g.pid[0], NULL, 0);
-	// waitpid(g.pid[2], &status, 0);
+    status = 0;
+    if (argc < 5)
+        print_error("invalid amount of argument");
 
+    // Crear la primera pipe para el primer proceso
+    if (pipe(pipefd) == -1)
+        print_error("Error creating the pipe");
 
-	while (1)
-	{
-		if (waitpid(-1, NULL, 0) == -1)
-			break ;
-	}
+    g.pid[0] = fork();
+    if (g.pid[0] == 0) {
+        // Primer proceso lee desde el archivo y escribe en la pipe
+        dup2(pipefd[1], STDOUT_FILENO);   // Redirigir salida a la pipe
+        close(pipefd[0]);
+        close(pipefd[1]);
+        cpid1(g, argv, envp);
+    }
+    close(pipefd[1]);  // El padre no escribe en esta pipe
+    prev_pipefd[0] = pipefd[0];  // Guardamos la lectura de la primera pipe
 
-	return (WEXITSTATUS(status));
+    // Procesos intermedios
+    for (int i = 3; i < argc - 2; i++) {
+        if (pipe(pipefd) == -1)
+            print_error("Error creating the pipe");
+
+        g.pid[1] = fork();
+        if (g.pid[1] == 0) {
+            // Leer desde la pipe anterior y escribir en la nueva pipe
+            dup2(prev_pipefd[0], STDIN_FILENO);   // Leer de la pipe anterior
+            dup2(pipefd[1], STDOUT_FILENO);       // Escribir en la nueva pipe
+            close(prev_pipefd[0]);
+            close(pipefd[0]);
+            close(pipefd[1]);
+            cpidmid(g, argv, i, envp);
+        }
+        close(prev_pipefd[0]);   // Cerramos el lado de lectura anterior
+        close(pipefd[1]);        // El padre no escribe en esta nueva pipe
+        prev_pipefd[0] = pipefd[0];  // Actualizamos la pipe anterior
+    }
+
+    // Último proceso
+    g.pid[2] = fork();
+    if (g.pid[2] == 0) {
+        // Leer desde la pipe anterior y escribir en el archivo
+        dup2(prev_pipefd[0], STDIN_FILENO);  // Leer de la última pipe
+        close(prev_pipefd[0]);
+        cpid2(g, argc, argv, envp);
+    }
+    close(prev_pipefd[0]);  // El padre no lee en la última pipe
+
+    // Esperar todos los procesos
+    while (waitpid(-1, &status, 0) > 0)
+        ;
+    return (WEXITSTATUS(status));
 }
+
+
 

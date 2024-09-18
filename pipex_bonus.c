@@ -60,10 +60,10 @@ void cpidmid(t_pp g, char **argv, int i, char **envp)
     g.com = ft_split(argv[i], ' ');
     g.exec = check_com(g.com[0], envp);
 
-    dup2(g.pipefd[0], STDIN_FILENO);   // Leer del pipe anterior
+    dup2(g.prev_pipefd[0], STDIN_FILENO);   // Leer del pipe anterior
     dup2(g.pipefd[1], STDOUT_FILENO);  // Escribir en el nuevo pipe
 
-
+	close(g.prev_pipefd[0]);
     close(g.pipefd[0]);
     close(g.pipefd[1]);
 
@@ -84,7 +84,7 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 	if (g.fd_out < 0)
 		print_error("error opening or creating fd_out");
 
-	dup2(g.pipefd[0], STDIN_FILENO);
+	dup2(g.prev_pipefd[0], STDIN_FILENO);
 	dup2(g.fd_out, STDOUT_FILENO);
 
 	close(g.pipefd[0]);
