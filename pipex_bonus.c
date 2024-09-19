@@ -65,11 +65,14 @@ void cpidmid(t_pp g, char **argv, int i, char **envp)
 
 void	cpid2(t_pp g, int argc, char **argv, char **envp)
 {
-	while (argv[argc - 2] && ((*argv[argc - 2] >= 9 && *argv[argc - 2] <= 13) || *argv[argc - 2] == 32))
-		argv[argc - 2]++;
-	if (*argv[argc - 2] == '\0')
+	int i;
+
+	i = argc - 2;
+	while (argv[i] && ((*argv[i] >= 9 && *argv[i] <= 13) || *argv[i] == 32))
+		argv[i]++;
+	if (*argv[i] == '\0')
 		print_error("Empty argument");
-	g.com = ft_split(argv[argc - 2], ' ');
+	g.com = ft_split(argv[i], ' ');
 	g.exec = check_com(g.com[0], envp);
 	g.fd_out = open(argv[argc - 1],  O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (g.fd_out < 0)
