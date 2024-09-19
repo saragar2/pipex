@@ -35,9 +35,10 @@ typedef struct s_pp
 }				t_pp;
 
 void 	print_error(char *arg);
-char	*check_com(char *com, char **envp);
+void    for_mid(int argc, char **argv, t_pp g, char **envp);
 void	cpid1(t_pp g, char **argv, char **envp);
 void	cpid2(t_pp g, int argc, char **argv, char **envp);
-void cpidmid(t_pp g, char **argv, int i, char **envp);
+void 	cpidmid(t_pp g, char **argv, int i, char **envp);
+int		f_strcmp(const char *s1, const char *s2);
 
 #endif

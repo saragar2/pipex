@@ -24,6 +24,11 @@ void    for_mid(int argc, char **argv, t_pp g, char **envp)
     }
 }
 
+void    hdoc(char *kword)
+{
+    while()
+}
+
 int main(int argc, char **argv, char **envp)
 {
     t_pp 	g;
@@ -32,6 +37,8 @@ int main(int argc, char **argv, char **envp)
     status = 0;
     if (argc < 5)
         print_error("invalid amount of argument");
+    if (f_strcmp(argv[1], "here_doc"))
+        hdoc(argv[2]);
     if (pipe(g.pipefd) == -1)
         print_error("Error creating the pipe");
     if ((g.pid[0] = fork()) == 0)
