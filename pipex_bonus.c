@@ -39,12 +39,16 @@ void	cpid1(t_pp g, char **argv, char **envp)
 	if (g.fd_in < 0)
 		print_error("error opening fd_in");
 
-	dup2(g.pipefd[1], STDOUT_FILENO);
-	dup2(g.fd_in, STDIN_FILENO);
+	// dup2(g.pipefd[1], STDOUT_FILENO);
+	// dup2(g.fd_in, STDIN_FILENO);
 
+	// close(g.pipefd[0]);
+	// close(g.pipefd[1]);
+	// close(g.fd_in);
+
+	dup2(g.pipefd[1], STDOUT_FILENO);   // Redirigir salida a la pipe
 	close(g.pipefd[0]);
 	close(g.pipefd[1]);
-	close(g.fd_in);
 
 	execve(g.exec, g.com, envp);
 	print_error("error executing first command");
@@ -60,12 +64,18 @@ void cpidmid(t_pp g, char **argv, int i, char **envp)
     g.com = ft_split(argv[i], ' ');
     g.exec = check_com(g.com[0], envp);
 
-    dup2(g.prev_pipefd[0], STDIN_FILENO);   // Leer del pipe anterior
-    dup2(g.pipefd[1], STDOUT_FILENO);  // Escribir en el nuevo pipe
+    // dup2(g.prev_pipefd[0], STDIN_FILENO);   // Leer del pipe anterior
+    // dup2(g.pipefd[1], STDOUT_FILENO);  // Escribir en el nuevo pipe
 
+	// close(g.prev_pipefd[0]);
+    // close(g.pipefd[0]);
+    // close(g.pipefd[1]);
+
+	dup2(g.prev_pipefd[0], STDIN_FILENO);   // Leer de la pipe anterior
+	dup2(g.pipefd[1], STDOUT_FILENO);       // Escribir en la nueva pipe
 	close(g.prev_pipefd[0]);
-    close(g.pipefd[0]);
-    close(g.pipefd[1]);
+	close(g.pipefd[0]);
+	close(g.pipefd[1]);
 
     execve(g.exec, g.com, envp);
     print_error("Error executing intermediate command");
@@ -88,7 +98,7 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 	dup2(g.fd_out, STDOUT_FILENO);
 
 	close(g.pipefd[0]);
-	close(g.pipefd[1]);
+	// close(g.pipefd[1]);
 	close(g.fd_out);
 
 	execve(g.exec, g.com, envp);
