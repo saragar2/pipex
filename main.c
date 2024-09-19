@@ -12,15 +12,15 @@
 
 #include "pipex.h"
 
-void print_error(char *arg)
+void	print_error(char *arg)
 {
-    perror(arg);
-    exit(1);
+	perror(arg);
+	exit(1);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_pp 	g;
+	t_pp	g;
 	int		status;
 
 	status = 0;
@@ -44,4 +44,3 @@ int main(int argc, char **argv, char **envp)
 	waitpid(g.pid[1], &status, 0);
 	return (WEXITSTATUS(status));
 }
-

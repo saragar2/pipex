@@ -23,9 +23,9 @@ char	*check_com(char *com, char **envp)
 	j = 0;
 	if (ft_strchr(com, '/'))
 		return (com);
-	while(envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
-	if(envp[i] == 0)
+	if (envp[i] == 0)
 		return (com);
 	envp[i] += 5;
 	routes = ft_split(envp[i], ':');
@@ -36,7 +36,7 @@ char	*check_com(char *com, char **envp)
 		if (access(new_com, X_OK) == 0)
 			return (new_com);
 	}
-	return(com);
+	return (com);
 }
 
 void	cpid1(t_pp g, char **argv, char **envp)
@@ -70,7 +70,7 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 		print_error("Empty argument");
 	g.com = ft_split(argv[3], ' ');
 	g.exec = check_com(g.com[0], envp);
-	g.fd_out = open(argv[argc - 1],  O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	g.fd_out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (g.fd_out < 0)
 		print_error("error opening or creating fd_out");
 	else if (g.pid[1] == 0)

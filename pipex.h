@@ -26,7 +26,7 @@ typedef struct s_pp
 	int		aux_argc;
 	int		curr_arg;
 	int		pipefd[2];
-	int 	prev_pipefd[2];
+	int		prev_pipefd[2];
 	pid_t	pid[3];
 	int		fd_in;
 	int		fd_out;
@@ -34,11 +34,11 @@ typedef struct s_pp
 	char	**com;
 }				t_pp;
 
-void 	print_error(char *arg);
-void    for_mid(int argc, char **argv, t_pp g, char **envp);
+void	print_error(char *arg);
+void	for_mid(int argc, char **argv, t_pp g, char **envp);
 void	cpid1(t_pp g, char **argv, char **envp);
 void	cpid2(t_pp g, int argc, char **argv, char **envp);
-void 	cpidmid(t_pp g, char **argv, int i, char **envp);
+void	cpidmid(t_pp g, char **argv, int i, char **envp);
 int		f_strcmp(const char *s1, const char *s2);
 
 #endif
