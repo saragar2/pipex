@@ -37,10 +37,18 @@ void	for_mid(int argc, char **argv, t_pp g, char **envp)
 	}
 }
 
-// void    hdoc(char *kword)
-// {
-//     while()
-// }
+void    hdoc(t_pp g, char *kword)
+{
+	char	*kword_sn;
+	g.hp_fd = open("here_doc", O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (g.hd_fd < 1)
+		print_error("Error while opening here_doc");
+	kword_sn = ft_strjoin(kword, '\n');
+    while(1)
+	{
+		
+	}
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -51,7 +59,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc < 5)
 		print_error("invalid amount of argument");
 	// if (f_strcmp(argv[1], "here_doc"))
-	//     hdoc(argv[2]);
+	//     hdoc(g, argv[2]);
 	if (pipe(g.pipefd) == -1)
 		print_error("Error creating the pipe");
 	g.pid[0] = fork();
