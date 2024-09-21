@@ -50,7 +50,7 @@ char	*ft_strdup(const char *s1)
 	return (aux);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*newstr;
 	int		size;
@@ -70,13 +70,13 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (newstr);
 }
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*aux;
 	size_t	cont;
 
 	cont = 0;
-	if (start < 0 || ft_strlen(s) < start)
+	if (ft_strlen(s) < start)
 		return (ft_strdup(""));
 	if (len > (ft_strlen(s) - start))
 		aux = malloc(ft_strlen(s) - start + 1);

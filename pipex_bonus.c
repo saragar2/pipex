@@ -56,13 +56,19 @@ char	*check_com(char *com, char **envp)
 
 void	cpid1(t_pp g, char **argv, char **envp)
 {
-	while (argv[2] && ((*argv[2] >= 9 && *argv[2] < 13) || *argv[2] == 32))
-		argv[2]++;
-	if (*argv[2] == '\0')
+	int i;
+
+	i = 2;
+	if (g.hd_flag == 1)
+		i = 3;
+	while (argv[i] && ((*argv[i] >= 9 && *argv[i] < 13) || *argv[i] == 32))
+		argv[i]++;
+	if (*argv[i] == '\0')
 		print_error("Empty argument");
-	g.com = ft_split(argv[2], ' ');
+	g.com = ft_split(argv[i], ' ');
 	g.exec = check_com(g.com[0], envp);
-	g.fd_in = open(argv[1], O_RDONLY);
+	if (g.hd_flag == 0)
+		g.fd_in = open(argv[1], O_RDONLY);
 	if (g.fd_in < 0)
 		print_error("error opening fd_in");
 	dup2(g.pipefd[1], STDOUT_FILENO);

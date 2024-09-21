@@ -29,6 +29,7 @@ typedef struct s_pp
 	int		pipefd[2];
 	int		prev_pipefd[2];
 	int		hd_fd;
+	int		hd_flag;
 	pid_t	pid[3];
 	int		fd_in;
 	int		fd_out;
@@ -41,6 +42,7 @@ void	for_mid(int argc, char **argv, t_pp g, char **envp);
 void	cpid1(t_pp g, char **argv, char **envp);
 void	cpid2(t_pp g, int argc, char **argv, char **envp);
 void	cpidmid(t_pp g, char **argv, int i, char **envp);
+void	hdoc(t_pp *g, char *kword);
 int		f_strcmp(const char *s1, const char *s2);
 
 #endif

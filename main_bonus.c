@@ -23,6 +23,8 @@ void	for_mid(int argc, char **argv, t_pp g, char **envp)
 	int	i;
 
 	i = 3;
+	if (g.hd_flag == 1)
+		i++;
 	while (i < (argc - 2))
 	{
 		if (pipe(g.pipefd) == -1)
@@ -37,17 +39,30 @@ void	for_mid(int argc, char **argv, t_pp g, char **envp)
 	}
 }
 
-void    hdoc(t_pp g, char *kword)
+void	hdoc(t_pp *g, char *kword)
 {
 	char	*kword_sn;
-	g.hp_fd = open("here_doc", O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (g.hd_fd < 1)
+	char	*line;
+
+	g->hd_fd = open(".here_doc", O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (g->hd_fd < 1)
 		print_error("Error while opening here_doc");
-	kword_sn = ft_strjoin(kword, '\n');
-    while(1)
+	kword_sn = ft_strjoin(kword, "\n");
+	while (1)
 	{
-		
+		write(1, "here_doc>", 9);
+		line = get_next_line(0);
+		if (!line || !f_strcmp(line, kword_sn))
+			break;
+		write(g->hd_fd, line, ft_strlen(line));
+		free(line);
 	}
+	free(line);
+	close(g->hd_fd);
+	g->fd_in = open(".here_doc", O_RDONLY);
+	if (g->fd_in < 0)
+		print_error("Error opening .here_doc file");
+	g->hd_flag = 1;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -56,10 +71,11 @@ int	main(int argc, char **argv, char **envp)
 	int		status;
 
 	status = 0;
-	if (argc < 5)
+	g.hd_flag = 0;
+	if (argc < 5 || (!f_strcmp(argv[1], "here_doc") && argc < 6))
 		print_error("invalid amount of argument");
-	// if (f_strcmp(argv[1], "here_doc"))
-	//     hdoc(g, argv[2]);
+	if (!f_strcmp(argv[1], "here_doc"))
+		hdoc(&g, argv[2]);
 	if (pipe(g.pipefd) == -1)
 		print_error("Error creating the pipe");
 	g.pid[0] = fork();

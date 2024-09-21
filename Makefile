@@ -1,7 +1,8 @@
 NAME = pipex
 
 SOURCES =			main.c pipex.c
-SOURCES_BONUS =		main_bonus.c pipex_bonus.c
+SOURCES_BONUS =		main_bonus.c pipex_bonus.c get_next_line/get_next_line.c \
+					get_next_line/get_next_line_utils.c
 
 OBJECTS = $(SOURCES:.c=.o)
 OBJECTS_BONUS = $(SOURCES_BONUS:.c=.o)
@@ -30,6 +31,7 @@ clean:
 	$(REMOVE) $(OBJECTS)
 	$(REMOVE) $(OBJECTS_BONUS)
 	$(REMOVE) .bonus
+	$(REMOVE) .here_doc
 	make -C libft/ fclean
 
 fclean: clean
