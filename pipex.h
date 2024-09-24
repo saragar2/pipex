@@ -38,7 +38,7 @@ typedef struct s_pp
 }				t_pp;
 
 void	print_error(char *arg);
-void	for_mid(int argc, char **argv, t_pp g, char **envp);
+void	for_mid(int argc, char **argv, t_pp *g, char **envp);
 void	cpid1(t_pp g, char **argv, char **envp);
 void	cpid2(t_pp g, int argc, char **argv, char **envp);
 void	cpidmid(t_pp g, char **argv, int i, char **envp);
