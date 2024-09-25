@@ -20,7 +20,7 @@ char	*check_com(char *com, char **envp)
 	char	*new_com;
 
 	i = 0;
-	j = 0;
+	j = -1;
 	if (ft_strchr(com, '/'))
 		return (com);
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
@@ -29,7 +29,7 @@ char	*check_com(char *com, char **envp)
 		return (com);
 	envp[i] += 5;
 	routes = ft_split(envp[i], ':');
-	while (routes[j++])
+	while (routes[++j])
 	{
 		new_com = ft_strjoin(routes[j], "/");
 		new_com = ft_strjoin(new_com, com);
