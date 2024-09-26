@@ -76,6 +76,8 @@ void	cpid1(t_pp g, char **argv, char **envp)
 	close(g.pipefd[1]);
 	execve(g.exec, g.com, envp);
 	print_error("error executing first command");
+	free(g.com);
+	free(g.exec);
 }
 
 void	cpidmid(t_pp g, char **argv, int i, char **envp)

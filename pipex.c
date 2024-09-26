@@ -12,12 +12,23 @@
 
 #include "pipex.h"
 
+void	free_split(char **split)
+{
+	int i;
+
+	i = -1;
+	while (split[++i])
+		free(split[i]);
+	free(split);
+}
+
 char	*check_com(char *com, char **envp)
 {
 	int		i;
 	int		j;
 	char	**routes;
 	char	*new_com;
+	char *res;
 
 	i = 0;
 	j = -1;
@@ -32,11 +43,19 @@ char	*check_com(char *com, char **envp)
 	while (routes[++j])
 	{
 		new_com = ft_strjoin(routes[j], "/");
-		new_com = ft_strjoin(new_com, com);
+		res = ft_strjoin(new_com, com);
+		free(new_com);
+		new_com = res;
 		if (access(new_com, X_OK) == 0)
-			return (new_com);
+		{
+			res = ft_strdup(new_com);
+			free_split(routes);
+			return (res);
+		}
+		free(new_com);
 	}
-	return (com);
+	free_split(routes);
+	return (ft_strdup(com));
 }
 
 void	cpid1(t_pp g, char **argv, char **envp)
@@ -50,16 +69,15 @@ void	cpid1(t_pp g, char **argv, char **envp)
 	g.fd_in = open(argv[1], O_RDONLY);
 	if (g.fd_in < 0)
 		print_error("error opening fd_in");
-	else if (g.pid[0] == 0)
-	{
-		dup2(g.pipefd[1], STDOUT_FILENO);
-		dup2(g.fd_in, STDIN_FILENO);
-		close(g.pipefd[0]);
-		close(g.pipefd[1]);
-		close(g.fd_in);
-		execve(g.exec, g.com, envp);
-		print_error("error executing first command");
-	}
+	dup2(g.pipefd[1], STDOUT_FILENO);
+	dup2(g.fd_in, STDIN_FILENO);
+	close(g.pipefd[0]);
+	close(g.pipefd[1]);
+	close(g.fd_in);
+	execve(g.exec, g.com, envp);
+	free_split(g.com);
+	free(g.exec);
+	print_error("error executing first command");
 }
 
 void	cpid2(t_pp g, int argc, char **argv, char **envp)
@@ -73,14 +91,11 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 	g.fd_out = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (g.fd_out < 0)
 		print_error("error opening or creating fd_out");
-	else if (g.pid[1] == 0)
-	{
-		dup2(g.pipefd[0], STDIN_FILENO);
-		dup2(g.fd_out, STDOUT_FILENO);
-		close(g.pipefd[0]);
-		close(g.pipefd[1]);
-		close(g.fd_out);
-		execve(g.exec, g.com, envp);
-		print_error("error executing second command");
-	}
+	dup2(g.pipefd[0], STDIN_FILENO);
+	dup2(g.fd_out, STDOUT_FILENO);
+	close(g.pipefd[0]);
+	close(g.pipefd[1]);
+	close(g.fd_out);
+	execve(g.exec, g.com, envp);
+	print_error("error executing second command");
 }
