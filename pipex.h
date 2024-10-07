@@ -37,6 +37,14 @@ typedef struct s_pp
 	char	**com;
 }				t_pp;
 
+typedef struct s_command
+{
+	char	**routes;
+	char	*new_com;
+	char	*res;
+	char 	*com;
+}				t_command;
+
 void	print_error(char *arg);
 void	for_mid(int argc, char **argv, t_pp *g, char **envp);
 void	cpid1(t_pp g, char **argv, char **envp);
@@ -44,5 +52,6 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp);
 void	cpidmid(t_pp g, char **argv, int i, char **envp);
 void	hdoc(t_pp *g, char *kword);
 int		f_strcmp(const char *s1, const char *s2);
+char	*whl_routes(t_command *c, int *flag);
 
 #endif

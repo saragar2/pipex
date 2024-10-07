@@ -22,40 +22,50 @@ void	free_split(char **split)
 	free(split);
 }
 
+char	*whl_routes(t_command *c, int *flag)
+{
+	int i;
+
+	i = -1;
+	*flag = 0;
+	while (c->routes[++i])
+	{
+		c->new_com = ft_strjoin(c->routes[i], "/");
+		c->res = ft_strjoin(c->new_com, c->com);
+		free(c->new_com);
+		c->new_com = c->res;
+		if (access(c->new_com, X_OK) == 0)
+		{
+			c->res = ft_strdup(c->new_com);
+			free_split(c->routes);
+			*flag = 1;
+			return (c->res);
+		}
+		free(c->new_com);
+	}
+	free_split(c->routes);
+	return (c->res);
+}
+
 char	*check_com(char *com, char **envp)
 {
-	int		i;
-	int		j;
-	char	**routes;
-	char	*new_com;
-	char *res;
+	int			i;
+	t_command	c;
 
+	c.com = com;
 	i = 0;
-	j = -1;
-	if (ft_strchr(com, '/'))
-		return (com);
+	if (ft_strchr(c.com, '/'))
+		return (c.com);
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (envp[i] == 0)
-		return (com);
+		return (c.com);
 	envp[i] += 5;
-	routes = ft_split(envp[i], ':');
-	while (routes[++j])
-	{
-		new_com = ft_strjoin(routes[j], "/");
-		res = ft_strjoin(new_com, com);
-		free(new_com);
-		new_com = res;
-		if (access(new_com, X_OK) == 0)
-		{
-			res = ft_strdup(new_com);
-			free_split(routes);
-			return (res);
-		}
-		free(new_com);
-	}
-	free_split(routes);
-	return (ft_strdup(com));
+	c.routes = ft_split(envp[i], ':');
+	c.res = whl_routes(&c, &i);
+	if (i == 1)
+		return (c.res);
+	return (ft_strdup(c.com));
 }
 
 void	cpid1(t_pp g, char **argv, char **envp)
