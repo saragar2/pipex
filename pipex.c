@@ -14,7 +14,7 @@
 
 void	free_split(char **split)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (split[++i])
@@ -24,7 +24,7 @@ void	free_split(char **split)
 
 char	*whl_routes(t_command *c, int *flag)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	*flag = 0;
@@ -107,5 +107,7 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 	close(g.pipefd[1]);
 	close(g.fd_out);
 	execve(g.exec, g.com, envp);
+	free_split(g.com);
+	free(g.exec);
 	print_error("error executing second command");
 }

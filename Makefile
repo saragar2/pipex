@@ -1,7 +1,8 @@
 NAME = pipex
 
 SOURCES =			main.c pipex.c
-SOURCES_BONUS =		main_bonus.c pipex_bonus.c get_next_line/get_next_line.c \
+SOURCES_BONUS =		main_bonus.c pipex_bonus.c aux_bonus.c \
+					get_next_line/get_next_line.c \
 					get_next_line/get_next_line_utils.c
 
 OBJECTS = $(SOURCES:.c=.o)

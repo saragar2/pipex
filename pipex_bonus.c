@@ -12,51 +12,55 @@
 
 #include "pipex.h"
 
-int	f_strcmp(const char *s1, const char *s2)
+char	*whl_routes(t_command *c, int *flag)
 {
-	int	cont;
+	int	i;
 
-	cont = 0;
-	while (*s1 == *s2 && *s1 != '\0')
+	i = -1;
+	*flag = 0;
+	while (c->routes[++i])
 	{
-		s1++;
-		s2++;
+		c->new_com = ft_strjoin(c->routes[i], "/");
+		c->res = ft_strjoin(c->new_com, c->com);
+		free(c->new_com);
+		c->new_com = c->res;
+		if (access(c->new_com, X_OK) == 0)
+		{
+			c->res = ft_strdup(c->new_com);
+			free_split(c->routes);
+			*flag = 1;
+			return (c->res);
+		}
+		free(c->new_com);
 	}
-	if (*s1 != *s2)
-		cont = (unsigned char)*s1 - (unsigned char)*s2;
-	return (cont);
+	free_split(c->routes);
+	return (c->res);
 }
 
 char	*check_com(char *com, char **envp)
 {
-	int		i;
-	int		j;
-	char	**routes;
-	char	*new_com;
+	int			i;
+	t_command	c;
 
+	c.com = com;
 	i = 0;
-	j = -1;
-	if (ft_strchr(com, '/'))
-		return (com);
+	if (ft_strchr(c.com, '/'))
+		return (c.com);
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (envp[i] == 0)
-		return (com);
+		return (c.com);
 	envp[i] += 5;
-	routes = ft_split(envp[i], ':');
-	while (routes[++j])
-	{
-		new_com = ft_strjoin(routes[j], "/");
-		new_com = ft_strjoin(new_com, com);
-		if (access(new_com, X_OK) == 0)
-			return (new_com);
-	}
-	return (com);
+	c.routes = ft_split(envp[i], ':');
+	c.res = whl_routes(&c, &i);
+	if (i == 1)
+		return (c.res);
+	return (ft_strdup(c.com));
 }
 
 void	cpid1(t_pp g, char **argv, char **envp)
 {
-	int i;
+	int	i;
 
 	i = 2;
 	if (g.hd_flag == 1)
@@ -75,9 +79,9 @@ void	cpid1(t_pp g, char **argv, char **envp)
 	close(g.pipefd[0]);
 	close(g.pipefd[1]);
 	execve(g.exec, g.com, envp);
-	print_error("error executing first command");
-	free(g.com);
+	free_split(g.com);
 	free(g.exec);
+	print_error("error executing first command");
 }
 
 void	cpidmid(t_pp g, char **argv, int i, char **envp)
@@ -94,6 +98,8 @@ void	cpidmid(t_pp g, char **argv, int i, char **envp)
 	close(g.pipefd[0]);
 	close(g.pipefd[1]);
 	execve(g.exec, g.com, envp);
+	free_split(g.com);
+	free(g.exec);
 	print_error("Error executing intermediate command");
 }
 
@@ -116,5 +122,7 @@ void	cpid2(t_pp g, int argc, char **argv, char **envp)
 	close(g.pipefd[0]);
 	close(g.fd_out);
 	execve(g.exec, g.com, envp);
+	free_split(g.com);
+	free(g.exec);
 	print_error("error executing second command");
 }

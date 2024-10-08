@@ -42,7 +42,7 @@ typedef struct s_command
 	char	**routes;
 	char	*new_com;
 	char	*res;
-	char 	*com;
+	char	*com;
 }				t_command;
 
 void	print_error(char *arg);
@@ -51,6 +51,7 @@ void	cpid1(t_pp g, char **argv, char **envp);
 void	cpid2(t_pp g, int argc, char **argv, char **envp);
 void	cpidmid(t_pp g, char **argv, int i, char **envp);
 void	hdoc(t_pp *g, char *kword);
+void	free_split(char **split);
 int		f_strcmp(const char *s1, const char *s2);
 char	*whl_routes(t_command *c, int *flag);
 

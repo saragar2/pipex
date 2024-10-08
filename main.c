@@ -18,14 +18,24 @@ void	print_error(char *arg)
 	exit(1);
 }
 
+void	error_handle(int argc, char **argv, char **envp)
+{
+	if (!*envp)
+		print_error("no envp detected");
+	if (argc != 5)
+		print_error("invalid amount of argument");
+	if (open(argv[1], O_RDONLY) < 0 || open(argv[argc - 1], \
+	O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0)
+		print_error("invalid fd");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_pp	g;
 	int		status;
 
 	status = 0;
-	if (argc != 5)
-		print_error("invalid amount of argument");
+	error_handle(argc, argv, envp);
 	if (pipe(g.pipefd) == -1)
 		print_error("Error creating the pipe");
 	g.pid[0] = fork();

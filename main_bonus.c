@@ -53,7 +53,7 @@ void	hdoc(t_pp *g, char *kword)
 		write(1, "here_doc>", 9);
 		line = get_next_line(0);
 		if (!line || !f_strcmp(line, kword_sn))
-			break;
+			break ;
 		write(g->hd_fd, line, ft_strlen(line));
 		free(line);
 	}
@@ -65,6 +65,17 @@ void	hdoc(t_pp *g, char *kword)
 	g->hd_flag = 1;
 }
 
+void	error_handle(int argc, char **argv, char **envp)
+{
+	if (!*envp)
+		print_error("no envp detected");
+	if (argc < 5 || (!f_strcmp(argv[1], "here_doc") && argc < 6))
+		print_error("invalid amount of argument");
+	if (open(argv[1], O_RDONLY) < 0 || open(argv[argc - 1], \
+	O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0)
+		print_error("invalid fd");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_pp	g;
@@ -72,8 +83,7 @@ int	main(int argc, char **argv, char **envp)
 
 	status = 0;
 	g.hd_flag = 0;
-	if (argc < 5 || (!f_strcmp(argv[1], "here_doc") && argc < 6))
-		print_error("invalid amount of argument");
+	error_handle(argc, argv, envp);
 	if (!f_strcmp(argv[1], "here_doc"))
 		hdoc(&g, argv[2]);
 	if (pipe(g.pipefd) == -1)
