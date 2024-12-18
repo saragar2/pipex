@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: saragar2 <saragar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 20:07:21 by saragar2          #+#    #+#             */
-/*   Updated: 2024/09/19 20:07:24 by saragar2         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:44:07 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	close(g.prev_pipefd[0]);
 	while (waitpid(-1, &status, 0) > 0)
 		;
+	if (g.hd_flag)
+		unlink(".here_doc");
 	return (WEXITSTATUS(status));
 }

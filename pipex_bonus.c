@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saragar2 <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: saragar2 <saragar2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 19:59:45 by saragar2          #+#    #+#             */
-/*   Updated: 2024/09/19 19:59:51 by saragar2         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:44:32 by saragar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	cpid1(t_pp g, char **argv, char **envp)
 		g.fd_in = open(argv[1], O_RDONLY);
 	if (g.fd_in < 0)
 		print_error("error opening fd_in");
+	dup2(g.fd_in, STDIN_FILENO);
 	dup2(g.pipefd[1], STDOUT_FILENO);
 	close(g.pipefd[0]);
 	close(g.pipefd[1]);
