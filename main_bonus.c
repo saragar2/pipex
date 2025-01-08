@@ -65,14 +65,15 @@ void	hdoc(t_pp *g, char *kword)
 	g->hd_flag = 1;
 }
 
-void	error_handle(int argc, char **argv, char **envp)
+void	error_handle(int argc, char **argv, char **envp, int hd_flag)
 {
 	if (!*envp)
 		print_error("no envp detected");
-	if (argc < 5 || (!f_strcmp(argv[1], "here_doc") && argc < 6))
+	if (argc < 5 || (hd_flag == 1 && argc < 6))
 		print_error("invalid amount of argument");
-	if (open(argv[1], O_RDONLY) < 0 || open(argv[argc - 1], \
-	O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0)
+	if (hd_flag == 0 && open(argv[1], O_RDONLY) < 0)
+		print_error("invalid fd");
+	if (hd_flag == 1 && open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644) < 0)
 		print_error("invalid fd");
 }
 
@@ -83,8 +84,10 @@ int	main(int argc, char **argv, char **envp)
 
 	status = 0;
 	g.hd_flag = 0;
-	error_handle(argc, argv, envp);
-	if (!f_strcmp(argv[1], "here_doc"))
+	if (f_strcmp(argv[1], "here_doc") == 0)
+		g.hd_flag = 1;
+	error_handle(argc, argv, envp, g.hd_flag);
+	if (g.hd_flag)
 		hdoc(&g, argv[2]);
 	if (pipe(g.pipefd) == -1)
 		print_error("Error creating the pipe");
